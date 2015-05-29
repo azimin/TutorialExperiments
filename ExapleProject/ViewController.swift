@@ -38,13 +38,9 @@ class ViewController: UIViewController {
     var quoteView: AZTagsView!
     var textWords: [String] = []
     var textChangedIndexes: [Int] = []
-    var textWorksIndexes: [Int] = []
     
     var first = "Here's to the crazy ones. The misfits. The rebels. The troublemakers. The round pegs in the square holes. The ones who see things differently. They're not fond of rules. And they have no respect for the status quo.\nYou can quote them, disagree with them, glorify or vilify them. About the only thing you can't do is ignore them. Because they change things. They push the human race forward.\nAnd while some may see them as the crazy ones, we see genius. Because the people who are crazy enough to think they can change the world, are the ones who do."
     var second = "We are the crazy ones. The misfits. The rebels. The troublemakers. The round pegs in the square holes. The ones who see things differently. We're not fond of rules. And we have no respect for the status quo.\nYou can quote us, disagree with us, glorify or vilify us. About the only thing you can't do is ignore us. Because we change things. We push the human race forward.\nAnd while some may see us as the crazy ones, we see genius. Because the people who are crazy enough to think they can change the world, are the ones who do."
-    
-    lazy var firstArray: [String] = self.first.componentsSeparatedByString(" ")
-    lazy var secondArray: [String] = self.second.componentsSeparatedByString(" ")
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -122,16 +118,11 @@ extension ViewController: UIScrollViewDelegate {
         updatePageControl()
         objects.map() { $0.changeObjectToPosition(scrollView.contentOffset) }
         
-        if scrollView.contentOffset.x > screenSize.width * 0.9 {
-            let delta = (scrollView.contentOffset.x - screenSize.width * 1.0) / screenSize.width
-            changeStateAtPercent(delta)
+        if scrollView.contentOffset.x > lastContentOffset.x && scrollView.contentOffset.x > screenSize.width * 1.1 {
+            changeTextStateToState(1)
+        } else if scrollView.contentOffset.x < lastContentOffset.x && scrollView.contentOffset.x < screenSize.width * 1.9 {
+            changeTextStateToState(0)
         }
-        
-//        if scrollView.contentOffset.x > lastContentOffset.x && scrollView.contentOffset.x > screenSize.width * 1.1 {
-//            changeTextStateToState(1)
-//        } else if scrollView.contentOffset.x < lastContentOffset.x && scrollView.contentOffset.x < screenSize.width * 1.9 {
-//            changeTextStateToState(0)
-//        }
         
         lastContentOffset = scrollView.contentOffset
     }
@@ -179,62 +170,21 @@ extension ViewController: UIScrollViewDelegate {
 
         }
     }
-    
-    func changeStateAtPercent(percent: CGFloat) {
-        let size = Int(CGFloat(textWords.count) * percent - 0.1)
-        
-        if size < 0 {
-            return
-        }
-        
-        var updatedIntexes: [Int] = []
-        
-        var changeFlag = false
-        for i in 0..<min(firstArray.count, size) {
-            if firstArray[i] != secondArray[i] {
-                if find(textChangedIndexes, i) == nil {
-                    textChangedIndexes.append(i)
-                }
-                
-                if find(textWorksIndexes, i) == nil {
-                    textWorksIndexes.append(i)
-                    updatedIntexes.append(i)
-                }
-            }
-            
-            println(i)
-        }
-        
-        for i in min(firstArray.count, size)..<textWords.count {
-            if firstArray[i] != secondArray[i] {
-                if find(textChangedIndexes, i) == nil {
-                    textChangedIndexes.append(i)
-                }
-                
-                if let index = find(textWorksIndexes, i) {
-                    textWorksIndexes.removeAtIndex(index)
-                    updatedIntexes.append(i)
-                }
-            }
-        }
-        
-        quoteView.updateAtIndexes(updatedIntexes)
-    }
 }
 
 extension ViewController: AZTagsViewDataSource {
     func numberOfTagsInTagsView(tagsView: AZTagsView) -> Int {
-        return firstArray.count
+        return textWords.count
     }
     
     func tagsView(tagsView: AZTagsView, tagAtIndex index: Int) -> String {
-        return firstArray[index]
+        return textWords[index]
     }
     
     func tagsViewWithAttributesString(tagsView: AZTagsView, tagAtIndex index: Int) -> NSAttributedString? {
-        if find(textWorksIndexes, index) != nil {
+        if find(textChangedIndexes, index) != nil {
             var attrs = [NSUnderlineStyleAttributeName : NSUnderlineStyle.StyleSingle.rawValue]
-            return NSMutableAttributedString(string:secondArray[index], attributes:attrs)
+            return NSMutableAttributedString(string:textWords[index], attributes:attrs)
         }
         
         return nil
