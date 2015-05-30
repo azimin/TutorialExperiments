@@ -15,7 +15,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var pageControl: UIPageControl!
     @IBOutlet weak var contentView: UIView!
     
-    let numberOfScreens: CGFloat = 4
+    let numberOfScreens: CGFloat = 6
     
     @IBOutlet weak var contentViewWidthConstraint: NSLayoutConstraint! {
         didSet {
@@ -35,12 +35,11 @@ class ViewController: UIViewController {
     
     var objects: [TutorialObject] = []
     
-    var quoteView: AZTagsView!
-    var textWords: [String] = []
-    var textChangedIndexes: [Int] = []
+    var quoteLabel: TOMSMorphingLabel!
     
-    var first = "Here's to the crazy ones. The misfits. The rebels. The troublemakers. The round pegs in the square holes. The ones who see things differently. They're not fond of rules. And they have no respect for the status quo.\nYou can quote them, disagree with them, glorify or vilify them. About the only thing you can't do is ignore them. Because they change things. They push the human race forward.\nAnd while some may see them as the crazy ones, we see genius. Because the people who are crazy enough to think they can change the world, are the ones who do."
-    var second = "We are the crazy ones. The misfits. The rebels. The troublemakers. The round pegs in the square holes. The ones who see things differently. We're not fond of rules. And we have no respect for the status quo.\nYou can quote us, disagree with us, glorify or vilify us. About the only thing you can't do is ignore us. Because we change things. We push the human race forward.\nAnd while some may see us as the crazy ones, we see genius. Because the people who are crazy enough to think they can change the world, are the ones who do."
+    var first = "The misfits. The rebels. The troublemakers. The round pegs in the square holes. The ones who see things differently. We're not fond of rules. And we have no respect for the status quo."
+    var second = "You can quote us, disagree with us, glorify or vilify us. About the only thing you can't do is ignore us. Because we change things. We push the human race forward."
+    var third = "And while some may see us as the crazy ones, we see genius. Because the people who are crazy enough to think they can change the world, are the ones who do."
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,62 +50,120 @@ class ViewController: UIViewController {
     
     func addObjects() {
         
-        objects.append(self.addQuote())
-        objects.append(self.logoObject())
+        addQuote()
+        addParagraph(first, atIndex: 0)
+        addParagraph(second, atIndex: 1)
+        addParagraph(third, atIndex: 2)
+        addLogoObject()
         addOthersElemts()
+        
         objects.map() { $0.changeObjectToPosition(self.scrollView.contentOffset) }
     }
     
-    func logoObject() -> TutorialObject {
+    func addLogoObject() {
         let imageView = UIImageView(image: UIImage(named: "wwdc_logo"))
         imageView.center = CGPoint(x: screenSize.width / 2, y: screenSize.height / 2)
         contentView.addSubview(imageView)
         
         let logoObject = TutorialObject(object: imageView)
-        logoObject.setPoints([CGPoint(x: 0.5, y: 0.35), CGPoint(x: 1.5, y: 0.15), CGPoint(x: 2.5, y: 0.15), CGPoint(x: 3.5, y: 0.35)])
+        logoObject.setPoints([CGPoint(x: 4.5, y: 0.85), CGPoint(x: 5.5, y: 0.35)])
         
         let bigLogoSize = screenSize.width - 16
         let smallLogoSize = screenSize.width / 3
-        logoObject.addActionAtPosition(TutorialObjectAction.Resize(size: CGSize(width: bigLogoSize, height: bigLogoSize)), position: 0)
-        logoObject.addActionAtPosition(TutorialObjectAction.Resize(size: CGSize(width: smallLogoSize, height: smallLogoSize)), position: 1)
-        logoObject.addActionAtPosition(TutorialObjectAction.Resize(size: CGSize(width: bigLogoSize, height: bigLogoSize)), position: 3)
+        logoObject.addActionAtPosition(TutorialObjectAction.Resize(size: CGSize(width: smallLogoSize, height: smallLogoSize)), position: 0)
+        logoObject.addActionAtPosition(TutorialObjectAction.Resize(size: CGSize(width: bigLogoSize, height: bigLogoSize)), position: 1)
         
-        return logoObject
+        objects.append(logoObject)
     }
     
     func addOthersElemts() {
         let imageView = UIImageView(image: UIImage(named: "wwdc_text_image"))
-        imageView.center = CGPoint(x: screenSize.width / 2, y: screenSize.height / 1.4)
+        imageView.center = CGPoint(x: screenSize.width * 5.5, y: screenSize.height / 1.4)
         contentView.addSubview(imageView)
         
-        let titleLable = UILabel(frame: CGRectMake(0, 0, (imageView.image?.size.width ?? 0) + 16, 70))
-        titleLable.center =  CGPoint(x: screenSize.width / 2, y: imageView.center.y + imageView.frame.height + 16)
-        titleLable.text = "An app to showcase the winners of the WWDC Scholarship."
-        titleLable.numberOfLines = 0
-        titleLable.textAlignment = .Center
-        contentView.addSubview(titleLable)
+        let anotheQuoteLabel = UILabel(frame: CGRectMake(0, 0, screenSize.width - 32, 30))
+        anotheQuoteLabel.center = CGPoint(x: screenSize.width / 2, y: screenSize.height / 1.8)
+        anotheQuoteLabel.text = "-Steve Jobs"
+        anotheQuoteLabel.font = UIFont(name: "HelveticaNeue-Light", size: 24)
+        anotheQuoteLabel.textAlignment = .Right
+        contentView.addSubview(anotheQuoteLabel)
         
         let startButton = UIButton(frame: CGRectMake(0, 0, imageView.frame.width, imageView.frame.height))
-        startButton.center = CGPoint(x: screenSize.width * 3.5, y: screenSize.height / 1.4)
+        startButton.center = CGPoint(x: screenSize.width * 5.5, y: screenSize.height / 1.2)
         startButton.backgroundColor = UIColor.redColor()
         startButton.setTitle("Start", forState: .Normal)
         contentView.addSubview(startButton)
     }
     
-    func addQuote() -> TutorialObject {
-        textWords = first.componentsSeparatedByString(" ")
+    func addQuote() {
+        var font = UIFont(name: "HelveticaNeue-Light", size: 24)!
+        let firstPartAttributes = AZTextFrameAttributes(string: "Here's ", font: font)
+        let secondPartAttributes = AZTextFrameAttributes(string: "   the Crazy Ones", font: font)
+        let defaultPartAttributes = AZTextFrameAttributes(string: first + "\n\n", width: screenSize.width - 16, font: UIFont(name: "HelveticaNeue-Light", size: 18)!)
         
-        let smallLogoSize = screenSize.width / 3
-        quoteView = AZTagsView(frame: CGRectMake(0, 0, screenSize.width - 16, screenSize.height - smallLogoSize - 16))
-        quoteView.center = CGPoint(x: screenSize.width / 2, y: screenSize.height / 2 + smallLogoSize)
-        quoteView.dataSource = self
-        contentView.addSubview(quoteView)
+        let firstWidth = AZTextFrame(attributes: firstPartAttributes).width
+        let secondWidth = AZTextFrame(attributes: secondPartAttributes).width
+        let defaultPartHeight = AZTextFrame(attributes: defaultPartAttributes).height
+        let sum = firstWidth + secondWidth
         
-        let quoteObject = TutorialObject(object: quoteView)
-        quoteObject.setPoints([CGPoint(x: 1.5, y: 0.65), CGPoint(x: 2.5, y: 0.65)])
-        //quoteObject.addActionAtPosition(TutorialObjectAction.ChangeAlpha(value: 0.0), position: 1)
+        var fullSpace = sum / screenSize.width
+        var firstSpace: CGFloat = fullSpace / 2 - (firstWidth / screenSize.width) / 2
+        var secondSpace: CGFloat = -fullSpace / 2 + (firstWidth / screenSize.width) + (secondWidth / screenSize.width) / 2
         
-        return quoteObject
+        var coefficent = 0.5 - (defaultPartHeight / screenSize.height) / 2
+        
+        quoteLabel = TOMSMorphingLabel(frame: CGRectMake(0, 0, firstWidth + 22, 30))
+        quoteLabel.font = font
+        quoteLabel.center =  CGPoint(x: screenSize.width / 2 - screenSize.width * firstSpace, y: 0)
+        quoteLabel.text = "Here's to "
+        quoteLabel.textAlignment = .Right
+        contentView.addSubview(quoteLabel)
+        
+        let quoteObject = TutorialObject(object: quoteLabel)
+        quoteObject.setPoints([CGPoint(x: 0.5 - firstSpace, y: 0.5), CGPoint(x: 1.5 - firstSpace, y: 0.5), CGPoint(x: 2.5 - firstSpace, y: coefficent), CGPoint(x: 3.5 - firstSpace, y: -0.1)])
+        objects.append(quoteObject)
+        
+        let anotheQuoteLabel = UILabel(frame: CGRectMake(0, 0, secondWidth, 30))
+        anotheQuoteLabel.center =  CGPoint(x: screenSize.width / 2 + screenSize.width * secondSpace, y: 0)
+        anotheQuoteLabel.text = "   the Crazy Ones"
+        anotheQuoteLabel.font = font
+        anotheQuoteLabel.textAlignment = .Left
+        contentView.addSubview(anotheQuoteLabel)
+        
+        let anotherQuoteObject = TutorialObject(object: anotheQuoteLabel)
+        anotherQuoteObject.setPoints([CGPoint(x: 0.5 + secondSpace, y: 0.5), CGPoint(x: 1.5 + secondSpace, y: 0.5), CGPoint(x: 2.5 + secondSpace, y: coefficent), CGPoint(x: 3.5 + secondSpace, y: -0.1)])
+        objects.append(anotherQuoteObject)
+    }
+    
+    func addParagraph(value: String, atIndex index: Int) {
+        let label = UILabel(frame: CGRectMake(0, 0, screenSize.width - 16, screenSize.height))
+        label.center =  CGPoint(x: screenSize.width * 0.5, y: 0)
+        label.text = value
+        label.numberOfLines = 0
+        label.font = UIFont(name: "HelveticaNeue-Light", size: 18)
+        label.textAlignment = .Center
+        contentView.addSubview(label)
+        
+        let labelObject = TutorialObject(object: label)
+        
+        var points = [CGPoint(x: 1.5 + CGFloat(index), y: 0.9), CGPoint(x: 2.5 + CGFloat(index), y: 0.5), CGPoint(x: 3.5 + CGFloat(index), y: 0.1)]
+        if index == 0 {
+            points.removeAtIndex(0)
+        }
+        labelObject.setPoints(points)
+        
+        if index == 0 {
+            labelObject.addActionAtPosition(TutorialObjectAction.ChangeAlpha(value: 1.0), position: 0)
+            labelObject.addActionAtPosition(TutorialObjectAction.ChangeAlpha(value: 0.1), position: 1)
+            labelObject.tag = 1
+        } else {
+            labelObject.addActionAtPosition(TutorialObjectAction.ChangeAlpha(value: 0.1), position: 0)
+            labelObject.addActionAtPosition(TutorialObjectAction.ChangeAlpha(value: 1.0), position: 1)
+            labelObject.addActionAtPosition(TutorialObjectAction.ChangeAlpha(value: index == 2 ? 0.0 : 0.1), position: 2)
+        }
+        
+        
+        objects.append(labelObject)
     }
     
     var lastContentOffset: CGPoint = CGPointZero
@@ -116,12 +173,30 @@ class ViewController: UIViewController {
 extension ViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(scrollView: UIScrollView) {
         updatePageControl()
-        objects.map() { $0.changeObjectToPosition(scrollView.contentOffset) }
         
-        if scrollView.contentOffset.x > lastContentOffset.x && scrollView.contentOffset.x > screenSize.width * 1.1 {
-            changeTextStateToState(1)
-        } else if scrollView.contentOffset.x < lastContentOffset.x && scrollView.contentOffset.x < screenSize.width * 1.9 {
-            changeTextStateToState(0)
+        var firstLabel: UILabel?
+        objects.map() {
+            tutorialObject -> () in
+            if tutorialObject.tag == 1 {
+                firstLabel = tutorialObject.object as? UILabel
+            }
+            tutorialObject.changeObjectToPosition(scrollView.contentOffset)
+        }
+        
+        if let label = firstLabel {
+            if scrollView.contentOffset.x > screenSize.width * 1.0 && scrollView.contentOffset.x < screenSize.width * 2.0 {
+                label.alpha = (scrollView.contentOffset.x - screenSize.width) / screenSize.width
+            }
+        }
+        
+        if scrollView.contentOffset.x > lastContentOffset.x && scrollView.contentOffset.x > screenSize.width * 0.5 {
+            if self.quoteLabel.text != "We are " {
+                self.quoteLabel.setText("We are ", withCompletionBlock: nil)
+            }
+        } else if scrollView.contentOffset.x < lastContentOffset.x && scrollView.contentOffset.x < screenSize.width * 0.5 {
+            if self.quoteLabel.text != "Here's to " {
+                self.quoteLabel.setText("Here's to ", withCompletionBlock: nil)
+            }
         }
         
         lastContentOffset = scrollView.contentOffset
@@ -132,111 +207,5 @@ extension ViewController: UIScrollViewDelegate {
         pageNumber = min(max(0, pageNumber), Int(numberOfScreens - 1))
         pageControl.currentPage = pageNumber
     }
-    
-    func changeTextStateToState(state: Int) {
-        if state == textState {
-            return
-        }
-        
-        textState = state
-        if state == 0 {
-            let newNames: [String] = first.componentsSeparatedByString(" ")
-            var indexes: [Int] = []
-            
-            for i in 0..<min(textWords.count, newNames.count) {
-                if newNames[i] != textWords[i] {
-                    indexes.append(i)
-                }
-            }
-            
-            textWords = newNames
-            self.textChangedIndexes = []
-            
-            quoteView.updateAtIndexes(indexes)
-        } else {
-            let newNames: [String] = second.componentsSeparatedByString(" ")
-            var indexes: [Int] = []
-            
-            for i in 0..<min(textWords.count, newNames.count) {
-                if newNames[i] != textWords[i] {
-                    indexes.append(i)
-                }
-            }
-            
-            textWords = newNames
-            self.textChangedIndexes = indexes
-            
-            quoteView.updateAtIndexes(indexes)
-
-        }
-    }
 }
-
-extension ViewController: AZTagsViewDataSource {
-    func numberOfTagsInTagsView(tagsView: AZTagsView) -> Int {
-        return textWords.count
-    }
-    
-    func tagsView(tagsView: AZTagsView, tagAtIndex index: Int) -> String {
-        return textWords[index]
-    }
-    
-    func tagsViewWithAttributesString(tagsView: AZTagsView, tagAtIndex index: Int) -> NSAttributedString? {
-        if find(textChangedIndexes, index) != nil {
-            var attrs = [NSUnderlineStyleAttributeName : NSUnderlineStyle.StyleSingle.rawValue]
-            return NSMutableAttributedString(string:textWords[index], attributes:attrs)
-        }
-        
-        return nil
-    }
-}
-
-//extension ViewController: AZTagsViewDelegate {
-//    func tagsView(tagsView: AZTagsView, didChangeSizeToSize size: CGSize) {
-//        self.tagsViewHeightConstraint.constant = size.height
-//        UIView.animateWithDuration(0.25, animations: { () -> Void in
-//            self.view.layoutIfNeeded()
-//        })
-//    }
-//    
-//    func tagsView(tagsView: AZTagsView, didSelectItemAtIndex index: Int) {
-//        
-//        
-//        if state {
-//            let newNames: [String] = first.componentsSeparatedByString(" ")
-//            var indexes: [Int] = []
-//            
-//            for i in 0..<min(names.count, newNames.count) {
-//                if newNames[i] != names[i] {
-//                    indexes.append(i)
-//                }
-//            }
-//            
-//            names = newNames
-//            self.indexs = []
-//            
-//            tagsView.updateAtIndexes(indexes)
-//            state = !state
-//            
-//            return
-//        }
-//        
-//        let newNames: [String] = second.componentsSeparatedByString(" ")
-//        var indexes: [Int] = []
-//        
-//        for i in 0..<min(names.count, newNames.count) {
-//            if newNames[i] != names[i] {
-//                indexes.append(i)
-//            }
-//        }
-//        
-//        names = newNames
-//        self.indexs = indexes
-//        
-//        tagsView.updateAtIndexes(indexes)
-//        state = !state
-//        
-//        
-//    }
-//}
 

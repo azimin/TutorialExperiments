@@ -7,10 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		928BFE0E1B191000005CA5C2 /* AZTextHeight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928BFE0B1B190FFF005CA5C2 /* AZTextHeight.swift */; };
-		928BFE0F1B191000005CA5C2 /* AZTagsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928BFE0C1B191000005CA5C2 /* AZTagsView.swift */; };
-		928BFE101B191000005CA5C2 /* AZTagCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928BFE0D1B191000005CA5C2 /* AZTagCollectionViewCell.swift */; };
-		928BFE141B191017005CA5C2 /* FSQCollectionViewAlignedLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 928BFE131B191017005CA5C2 /* FSQCollectionViewAlignedLayout.m */; };
+		928BFE1A1B192154005CA5C2 /* NSString+Morphing.m in Sources */ = {isa = PBXBuildFile; fileRef = 928BFE171B192154005CA5C2 /* NSString+Morphing.m */; };
+		928BFE1B1B192154005CA5C2 /* TOMSMorphingLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 928BFE191B192154005CA5C2 /* TOMSMorphingLabel.m */; };
+		928BFE1D1B192593005CA5C2 /* AZTextHeight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928BFE1C1B192593005CA5C2 /* AZTextHeight.swift */; };
 		92F4C18E1B17CDD200003F29 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F4C18D1B17CDD200003F29 /* AppDelegate.swift */; };
 		92F4C1901B17CDD200003F29 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F4C18F1B17CDD200003F29 /* ViewController.swift */; };
 		92F4C1931B17CDD200003F29 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 92F4C1911B17CDD200003F29 /* Main.storyboard */; };
@@ -20,12 +19,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		928BFE0B1B190FFF005CA5C2 /* AZTextHeight.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AZTextHeight.swift; sourceTree = "<group>"; };
-		928BFE0C1B191000005CA5C2 /* AZTagsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AZTagsView.swift; sourceTree = "<group>"; };
-		928BFE0D1B191000005CA5C2 /* AZTagCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AZTagCollectionViewCell.swift; sourceTree = "<group>"; };
 		928BFE111B191016005CA5C2 /* ExapleProject-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ExapleProject-Bridging-Header.h"; sourceTree = "<group>"; };
-		928BFE121B191017005CA5C2 /* FSQCollectionViewAlignedLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSQCollectionViewAlignedLayout.h; sourceTree = "<group>"; };
-		928BFE131B191017005CA5C2 /* FSQCollectionViewAlignedLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSQCollectionViewAlignedLayout.m; sourceTree = "<group>"; };
+		928BFE161B192154005CA5C2 /* NSString+Morphing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Morphing.h"; sourceTree = "<group>"; };
+		928BFE171B192154005CA5C2 /* NSString+Morphing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Morphing.m"; sourceTree = "<group>"; };
+		928BFE181B192154005CA5C2 /* TOMSMorphingLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TOMSMorphingLabel.h; sourceTree = "<group>"; };
+		928BFE191B192154005CA5C2 /* TOMSMorphingLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TOMSMorphingLabel.m; sourceTree = "<group>"; };
+		928BFE1C1B192593005CA5C2 /* AZTextHeight.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AZTextHeight.swift; sourceTree = "<group>"; };
 		92F4C1881B17CDD200003F29 /* ExapleProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ExapleProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		92F4C18C1B17CDD200003F29 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		92F4C18D1B17CDD200003F29 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -47,13 +46,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		928BFE151B19101A005CA5C2 /* Layout */ = {
+		928BFE151B19101A005CA5C2 /* Label */ = {
 			isa = PBXGroup;
 			children = (
-				928BFE121B191017005CA5C2 /* FSQCollectionViewAlignedLayout.h */,
-				928BFE131B191017005CA5C2 /* FSQCollectionViewAlignedLayout.m */,
+				928BFE161B192154005CA5C2 /* NSString+Morphing.h */,
+				928BFE171B192154005CA5C2 /* NSString+Morphing.m */,
+				928BFE181B192154005CA5C2 /* TOMSMorphingLabel.h */,
+				928BFE191B192154005CA5C2 /* TOMSMorphingLabel.m */,
 			);
-			name = Layout;
+			name = Label;
 			sourceTree = "<group>";
 		};
 		92F4C17F1B17CDD200003F29 = {
@@ -78,10 +79,8 @@
 				92F4C18D1B17CDD200003F29 /* AppDelegate.swift */,
 				92F4C18F1B17CDD200003F29 /* ViewController.swift */,
 				92F4C1AD1B17CDE000003F29 /* TutorialObject.swift */,
-				928BFE0B1B190FFF005CA5C2 /* AZTextHeight.swift */,
-				928BFE0C1B191000005CA5C2 /* AZTagsView.swift */,
-				928BFE0D1B191000005CA5C2 /* AZTagCollectionViewCell.swift */,
-				928BFE151B19101A005CA5C2 /* Layout */,
+				928BFE1C1B192593005CA5C2 /* AZTextHeight.swift */,
+				928BFE151B19101A005CA5C2 /* Label */,
 				92F4C1911B17CDD200003F29 /* Main.storyboard */,
 				92F4C1941B17CDD200003F29 /* Images.xcassets */,
 				92F4C1961B17CDD200003F29 /* LaunchScreen.xib */,
@@ -169,12 +168,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				928BFE1D1B192593005CA5C2 /* AZTextHeight.swift in Sources */,
 				92F4C1901B17CDD200003F29 /* ViewController.swift in Sources */,
-				928BFE0F1B191000005CA5C2 /* AZTagsView.swift in Sources */,
-				928BFE101B191000005CA5C2 /* AZTagCollectionViewCell.swift in Sources */,
+				928BFE1A1B192154005CA5C2 /* NSString+Morphing.m in Sources */,
 				92F4C1AE1B17CDE000003F29 /* TutorialObject.swift in Sources */,
-				928BFE0E1B191000005CA5C2 /* AZTextHeight.swift in Sources */,
-				928BFE141B191017005CA5C2 /* FSQCollectionViewAlignedLayout.m in Sources */,
+				928BFE1B1B192154005CA5C2 /* TOMSMorphingLabel.m in Sources */,
 				92F4C18E1B17CDD200003F29 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

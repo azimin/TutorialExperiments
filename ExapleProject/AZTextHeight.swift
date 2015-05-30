@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Alex. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
 @objc(AZTextFrameAttributes)
 class AZTextFrameAttributes {
@@ -31,18 +31,19 @@ class AZTextFrameAttributes {
     
     init(string: String, font: UIFont) {
         self.string = string
-        self.attributes = [NSFontAttributeName: UIFont.systemFontOfSize(14)]
+        self.attributes = [NSFontAttributeName: font]
     }
     
     init(string: String, width: CGFloat) {
         self.string = string
         self.width = width
+        self.attributes = [NSFontAttributeName: UIFont.systemFontOfSize(18)]
     }
     
     init(string: String, width: CGFloat, font: UIFont) {
         self.string = string
         self.width = width
-        self.attributes = [NSFontAttributeName: UIFont.systemFontOfSize(14)]
+        self.attributes = [NSFontAttributeName: font]
     }
     
     init(attributedString: NSAttributedString) {
